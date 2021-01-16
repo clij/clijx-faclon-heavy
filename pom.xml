@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+		http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>net.haesleinhuepf</groupId>
+		<artifactId>clij-parent-pom</artifactId>
+		<version>2.2.0.14</version>
+		<relativePath />
+	</parent>
+
+	<groupId>net.haesleinhuepf</groupId>
+	<artifactId>clijx-faclon-heavy_</artifactId>
+	<version>0.30.1.14</version>
+
+	<name>clijx-faclon-heavy_</name>
+	<description>Multi-GPU support for processing big data</description>
+	<url>http://haesleinhuepf.net</url>
+	<inceptionYear>2021</inceptionYear>
+	<organization>
+		<name>DFG Cluster of Excellence "Physics of Life", TU Dresden</name>
+		<url>https://physics-of-life.tu-dresden.de/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Simplified BSD License</name>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>haesleinhuepf</id>
+			<name>Robert Haase</name>
+			<url>http://haesleinhuepf.net</url>
+			<organization>BiA-PoL TU-Dresden</organization>
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>none</name>
+			<properties><id>none</id></properties>
+		</contributor>
+	</contributors>
+
+	<mailingLists>
+		<mailingList>
+			<name>ImageSc Forum</name>
+			<archive>http://forum.image.sc/</archive>
+		</mailingList>
+	</mailingLists>
+
+	<scm>
+		<connection>scm:git:git://github.com/clij/clijx</connection>
+        <developerConnection>scm:git:git@github.com/clij/clijx</developerConnection>
+        <tag>HEAD</tag>
+		<url>https://github.com/clij/clijx</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/clij/clijx/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>None</system>
+	</ciManagement>
+
+	<properties>
+		<package-name>net.haesleinhuepf</package-name>
+		<license.licenseName>bsd_3</license.licenseName>
+		<license.copyrightOwners>Robert Haase, MPI CBG</license.copyrightOwners>
+		<scijava.app.directory>C:/programs/fiji-win64/Fiji.app/</scijava.app.directory>
+		<!--<scijava.app.directory>/home/rhaase/programs/fiji/Fiji.app/</scijava.app.directory>-->
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.haesleinhuepf</groupId>
+			<artifactId>clij_</artifactId>
+     	</dependency>
+		<dependency>
+			<groupId>net.haesleinhuepf</groupId>
+			<artifactId>clij-clearcl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.haesleinhuepf</groupId>
+			<artifactId>clij2_</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.haesleinhuepf</groupId>
+			<artifactId>clijx-weka_</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.sarxos</groupId>
+			<artifactId>webcam-capture</artifactId>
+			<version>0.3.12</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>clij</id>
+			<url>http://dl.bintray.com/haesleinhuepf/clij</url>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+			<id>bintray-haesleinhuepf-snapshots</id>
+			<name>bintray-snapshots</name>
+			<url>https://api.bintray.com/maven/haesleinhuepf/clij/clijx_/;publish=1</url>
+		</repository>
+	</distributionManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration>
+					<argLine>-Xmx2G</argLine>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
