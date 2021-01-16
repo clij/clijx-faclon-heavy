@@ -15,7 +15,11 @@ public class CLIJxPool {
     CLIJx[] pool;
 
     public CLIJxPool(int[] device_indices, int[] number_of_instances_per_clij) {
-        pool = new CLIJx[device_indices.length * number_of_instances_per_clij.length];
+        int sum = 0;
+        for (int v : number_of_instances_per_clij) {
+            sum = sum + v;
+        }
+        pool = new CLIJx[device_indices.length * sum];
 
         int count = 0;
         for (int i = 0; i < device_indices.length; i++) {
