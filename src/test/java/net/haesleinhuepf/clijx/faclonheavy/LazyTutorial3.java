@@ -2,7 +2,7 @@ package net.haesleinhuepf.clijx.faclonheavy;
 
 import java.io.IOException;
 
-import org.janelia.saalfeldlab.i2k2020.ops.CLIJ2FilterOp;
+import org.janelia.saalfeldlab.i2k2020.ops.CLIJxFilterOp;
 import org.janelia.saalfeldlab.i2k2020.util.Lazy;
 import org.janelia.saalfeldlab.i2k2020.util.N5Factory;
 import org.janelia.saalfeldlab.n5.N5Reader;
@@ -42,16 +42,16 @@ public class LazyTutorial3 {
                         (a, b) -> b.set(a.getRealFloat()),
                         new FloatType());
 
-        final CLIJ2FilterOp<FloatType, FloatType> clij2Filter =
-                new CLIJ2FilterOp<>(Views.extendMirrorSingle(floats), 20, 20, 20);
-        clij2Filter.setFilter(
-                (a, b) -> clij2Filter.getClij2().differenceOfGaussian(a, b, 4, 4, 4, 3, 3, 3));
+        final CLIJxFilterOp<FloatType, FloatType> clijxFilter =
+                new CLIJxFilterOp<>(Views.extendMirrorSingle(floats), 20, 20, 20);
+        clijxFilter.setFilter(
+                (a, b) -> clijxFilter.getClijx().differenceOfGaussian(a, b, 4, 4, 4, 3, 3, 3));
         final RandomAccessibleInterval<FloatType> filtered = Lazy.generate(
                 img,
                 new int[] {128, 128, 128},
                 new FloatType(),
                 AccessFlags.setOf(AccessFlags.VOLATILE),
-                clij2Filter);
+                clijxFilter);
 
         bdv = BdvFunctions.show(VolatileViews.wrapAsVolatile(filtered, queue), "DoG", BdvOptions.options().addTo(bdv));
         bdv.setDisplayRange(-1000, 1000);
