@@ -45,9 +45,8 @@ public class Tutorial {
         System.out.println("CLIJ pool: \n" + pool.log());
 
         // create a processor representing the workflow we want to apply to the image
-        TileProcessor processor = new DummyFilter();
         final CLIJxFilterOp<FloatType, FloatType> clijxFilter =
-                new CLIJxFilterOp<>(Views.extendMirrorSingle(floats), pool, processor, 20, 20, 20);
+                new CLIJxFilterOp<FloatType, FloatType>(Views.extendMirrorSingle(floats), pool, DummyFilter.class, 20, 20, 20);
 
         // open a BigDataViewer
         final SharedQueue queue = new SharedQueue(Math.max(1, pool.size()));
