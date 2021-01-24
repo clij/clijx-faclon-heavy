@@ -87,6 +87,10 @@ public class CLIJxPool {
         return text.toString();
     }
 
+    /**
+     * Select a CLIJx instance that's idle at the moment, mark it as busy and return it.
+     * @return a clijx instance
+     */
     public synchronized CLIJx getIdleCLIJx() {
         while (true) {
             for (int i = 0; i < idle.length; i++) {
@@ -107,6 +111,11 @@ public class CLIJxPool {
         }
     }
 
+    /**
+     * Retrieve a CLIJx instance (which should be part of the pool already), empty its memory and mark it as idle.
+     * 
+     * @param clijx
+     */
     public void setCLIJxIdle(CLIJx clijx) {
         // clean up that instance before another thread can use it.
         clijx.clear();
