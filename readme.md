@@ -13,10 +13,10 @@ multiple tiles can be processed in parallel on such dedicated GPUs, you can conf
 
 ```
 CLIJxPool pool = CLIJxPool.fromDeviceNames(
-                new String[]{"Intel(R) UHD Graphics 620", "RTX"},
-                new int[]{   1,     4});
-        System.out.println("CLIJ pool size: " + pool.size());
-        System.out.println("CLIJ pool: \n" + pool.log());
+            new String[]{"Intel(R) UHD Graphics 620", "RTX"},
+            new int[]{                             1,     4});
+System.out.println("CLIJ pool size: " + pool.size());
+System.out.println("CLIJ pool: \n" + pool.log());
 ```
 Output:
 ```
