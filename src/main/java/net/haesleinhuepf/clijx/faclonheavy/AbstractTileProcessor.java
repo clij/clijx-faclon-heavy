@@ -9,9 +9,4 @@ public abstract class AbstractTileProcessor implements TileProcessor {
     public void setCLIJx(CLIJx clijx) {
         this.clijx = clijx;
     }
-
-    @Override
-    public CLIJx getCLIJx() {
-        return clijx;
-    }
 }
