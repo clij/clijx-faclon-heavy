@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import net.haesleinhuepf.clijx.faclonheavy.CLIJxPool;
+import net.haesleinhuepf.clijx.faclonheavy.TileProcessor;
 import org.janelia.saalfeldlab.i2k2020.util.Util;
 
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
@@ -29,18 +31,13 @@ public class CLIJxFilterOp<T extends RealType<T> & NativeType<T>, S extends Real
 
 	protected final RandomAccessible<S> source;
 	protected final long[] padding;
-	protected final CLIJx clijx;
-	protected BiConsumer<ClearCLBuffer, ClearCLBuffer> filter = (a, b) -> {};
-
-	public CLIJx getClijx() { return clijx; }
-	public void setFilter(final BiConsumer<ClearCLBuffer, ClearCLBuffer> filter) {
-
-		this.filter = filter;
-	}
+	protected final CLIJxPool clijxPool;
+	protected final TileProcessor filter;
 
 	public CLIJxFilterOp(
 			final RandomAccessible<S> source,
-			final CLIJx clijx,
+			final CLIJxPool clijxPool,
+			final TileProcessor filter,
 			final long... padding) {
 
 		this.source = source;
@@ -49,19 +46,15 @@ public class CLIJxFilterOp<T extends RealType<T> & NativeType<T>, S extends Real
 			this.padding = padding;
 		else
 			this.padding = Arrays.copyOf(padding, n);
-		this.clijx = clijx;
-	}
-
-	public CLIJxFilterOp(
-			final RandomAccessible<S> source,
-			final long... padding) {
-
-		this(source, null, padding);
+		this.clijxPool = clijxPool;
+		this.filter = filter;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void accept(final RandomAccessibleInterval<T> cell) {
+		CLIJx clijx = clijxPool.getIdleCLIJx();
+		System.out.println("Start processing on " + clijx.getGPUName() + ": " + cell);
 
 		final RandomAccessibleIntervalToClearCLBufferConverter rai2cl = new RandomAccessibleIntervalToClearCLBufferConverter();
 		rai2cl.setCLIJ(clijx.getCLIJ());
@@ -69,6 +62,10 @@ public class CLIJxFilterOp<T extends RealType<T> & NativeType<T>, S extends Real
 		final ClearCLBuffer input = rai2cl.convert(Views.interval(source, Intervals.expand(cell, padding)));
 		final ClearCLBuffer output = clijx.create(input);
 
+		System.out.println("input: " + input);
+		System.out.println("output: " + output);
+
+		filter.setCLIJx(clijx);
 		filter.accept(input, output);
 
 		final ClearCLBufferToRandomAccessibleIntervalConverter cl2rai = new ClearCLBufferToRandomAccessibleIntervalConverter();
@@ -79,6 +76,10 @@ public class CLIJxFilterOp<T extends RealType<T> & NativeType<T>, S extends Real
 
 		input.close();
 		output.close();
+
+		clijxPool.setCLIJxIdle(clijx);
+
+		System.out.println("Finished processing on " + clijx.getGPUName() + ": " + cell);
 	}
 }
 

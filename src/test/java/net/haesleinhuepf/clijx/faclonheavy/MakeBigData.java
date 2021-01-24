@@ -19,11 +19,13 @@ import java.io.IOException;
 public class MakeBigData {
     public static void main(String[] args) throws IOException {
         String source_file = "data/Lund_000500_resampled-cropped.tif";
-        String target_folder = "data/n5/";
+        String target_folder = "C:/structure/data/n5/";
 
-        long scale_factor = 100;
+        long scale_factor = 20;
 
         ImagePlus imp = IJ.openImage(source_file);
+        // convert to float to prevent issues in LazyTutorial3
+        IJ.run(imp, "32-bit", "");
 
         Img img = ImageJFunctions.convertFloat(imp);
 

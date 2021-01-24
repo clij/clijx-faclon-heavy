@@ -15,8 +15,8 @@ import org.janelia.saalfeldlab.n5.N5Reader;
 import org.janelia.saalfeldlab.n5.N5Writer;
 import org.janelia.saalfeldlab.n5.googlecloud.N5GoogleCloudStorageReader;
 import org.janelia.saalfeldlab.n5.googlecloud.N5GoogleCloudStorageWriter;
-import org.janelia.saalfeldlab.n5.hdf5.N5HDF5Reader;
-import org.janelia.saalfeldlab.n5.hdf5.N5HDF5Writer;
+//import org.janelia.saalfeldlab.n5.hdf5.N5HDF5Reader;
+//import org.janelia.saalfeldlab.n5.hdf5.N5HDF5Writer;
 import org.janelia.saalfeldlab.n5.s3.N5AmazonS3Reader;
 import org.janelia.saalfeldlab.n5.s3.N5AmazonS3Writer;
 import org.janelia.saalfeldlab.n5.zarr.N5ZarrReader;
@@ -127,17 +127,16 @@ public interface N5Factory {
 	 * @return
 	 * @throws IOException
 	 */
-	public static N5HDF5Reader openHDF5Reader(final String path, final int... defaultBlockSize) throws IOException {
-
-		final IHDF5Reader hdf5Reader = HDF5Factory.openForReading(path);
-		return new N5HDF5Reader(hdf5Reader, defaultBlockSize);
-	}
+//	public static N5HDF5Reader openHDF5Reader(final String path, final int... defaultBlockSize) throws IOException {
+//
+//		final IHDF5Reader hdf5Reader = HDF5Factory.openForReading(path);
+//		return new N5HDF5Reader(hdf5Reader, defaultBlockSize);
+//	}
 
 	/**
 	 * Open an {@link N5Reader} for Google Cloud.
 	 *
 	 * @param url
-	 * @param projectId
 	 * @return
 	 * @throws IOException
 	 */
@@ -206,11 +205,11 @@ public interface N5Factory {
 	 * @return
 	 * @throws IOException
 	 */
-	public static N5HDF5Writer openHDF5Writer(final String path, final int... defaultBlockSize) throws IOException {
-
-		final IHDF5Writer hdf5Writer = HDF5Factory.open(path);
-		return new N5HDF5Writer(hdf5Writer, defaultBlockSize);
-	}
+//	public static N5HDF5Writer openHDF5Writer(final String path, final int... defaultBlockSize) throws IOException {
+//
+//		final IHDF5Writer hdf5Writer = HDF5Factory.open(path);
+//		return new N5HDF5Writer(hdf5Writer, defaultBlockSize);
+//	}
 
 	/**
 	 * Open an {@link N5Writer} for Google Cloud.
@@ -264,18 +263,18 @@ public interface N5Factory {
 			final String scheme = uri.getScheme();
 			if (scheme == null);
 			else if (scheme.equals("s3"))
-				return openAWSS3Reader(url);
+				return null; //openAWSS3Reader(url);
 			else if (scheme.equals("gs"))
 				return openGoogleCloudReader(url);
 			else if (scheme.equals("https") || scheme.equals("http")) {
 				if (uri.getHost().matches(".*s3\\.amazonaws\\.com"))
-					return openAWSS3Reader(url);
+					return null; //openAWSS3Reader(url);
 				else if (uri.getHost().matches(".*cloud\\.google\\.com"))
 					return openGoogleCloudReader(url);
 			}
 		} catch (final URISyntaxException e) {}
 		if (url.matches("(?i).*\\.(h5|hdf5|hdf)"))
-			return openHDF5Reader(url, 64);
+			return null; //openHDF5Reader(url, 64);
 		else if (url.matches("(?i).*\\.zarr"))
 			return openZarrReader(url);
 		else
@@ -307,7 +306,7 @@ public interface N5Factory {
 			}
 		} catch (final URISyntaxException e) {}
 		if (url.matches("(?i).*\\.(h5|hdf5|hdf)"))
-			return openHDF5Writer(url, 64);
+			return null; //openHDF5Writer(url, 64);
 		else if (url.matches("(?i).*\\.zarr"))
 			return openZarrWriter(url);
 		else

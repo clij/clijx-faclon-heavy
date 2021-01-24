@@ -13,18 +13,21 @@ import java.util.List;
  */
 public class CLIJxPool {
     CLIJx[] pool;
+    boolean[] idle;
 
     public CLIJxPool(int[] device_indices, int[] number_of_instances_per_clij) {
         int sum = 0;
         for (int v : number_of_instances_per_clij) {
             sum = sum + v;
         }
-        pool = new CLIJx[device_indices.length * sum];
+        pool = new CLIJx[sum];
+        idle = new boolean[pool.length];
 
         int count = 0;
         for (int i = 0; i < device_indices.length; i++) {
             for (int j = 0; j < number_of_instances_per_clij[i]; j++) {
                 pool[count] = new CLIJx(new CLIJ(device_indices[i]));
+                idle[count] = true;
                 count ++;
             }
         }
@@ -76,7 +79,31 @@ public class CLIJxPool {
         return pool.length;
     }
 
-    public CLIJx get(int index) {
-        return pool[index];
+    public synchronized CLIJx getIdleCLIJx() {
+        while (true) {
+            for (int i = 0; i < idle.length; i++) {
+                if (idle[i]) {
+                    idle[i] = false;
+                    return pool[i];
+                }
+            }
+
+            // if none is idle, wait a bit and continue checking again.
+            // Todo: This is a potential endless loop. Fix this.
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+    }
+
+    public void setCLIJxIdle(CLIJx clijx) {
+        for (int i = 0; i < idle.length; i++) {
+            if (pool[i] == clijx) {
+                idle[i] = true;
+            }
+        }
     }
 }
