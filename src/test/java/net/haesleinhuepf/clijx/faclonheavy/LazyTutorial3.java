@@ -2,6 +2,7 @@ package net.haesleinhuepf.clijx.faclonheavy;
 
 import java.io.IOException;
 
+import net.haesleinhuepf.clijx.faclonheavy.implementations.DummyFilter;
 import org.janelia.saalfeldlab.i2k2020.ops.CLIJxFilterOp;
 import org.janelia.saalfeldlab.i2k2020.util.Lazy;
 import org.janelia.saalfeldlab.i2k2020.util.N5Factory;
