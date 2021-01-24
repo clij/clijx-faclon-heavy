@@ -79,6 +79,14 @@ public class CLIJxPool {
         return pool.length;
     }
 
+    public String log() {
+        StringBuilder text = new StringBuilder();
+        for (int i = 0; i < pool.length; i ++ ) {
+            text.append(" * " + pool[i].getGPUName() + "[" + pool[i] + "]" + "\n");
+        }
+        return text.toString();
+    }
+
     public synchronized CLIJx getIdleCLIJx() {
         while (true) {
             for (int i = 0; i < idle.length; i++) {
@@ -100,6 +108,8 @@ public class CLIJxPool {
     }
 
     public void setCLIJxIdle(CLIJx clijx) {
+        // clean up that instance before another thread can use it.
+        clijx.clear();
         for (int i = 0; i < idle.length; i++) {
             if (pool[i] == clijx) {
                 idle[i] = true;

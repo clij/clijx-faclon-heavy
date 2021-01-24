@@ -23,44 +23,43 @@ import net.imglib2.view.Views;
 /**
  * Process an image tile-by-tile on multiple GPUs
  *
+ * This code originates from https://github.com/saalfeldlab/i2k2020-imglib2-advanced/blob/main/src/main/java/org/janelia/saalfeldlab/i2k2020/LazyTutorial3.java
+ *
  * @author Stephan Saalfeld, Robert Haase
  */
-public class LazyTutorial3 {
+public class Tutorial {
 
     public static final void main(final String... args) throws IOException {
 
-
+        // define data location. If you don't have this dataset, create it using the MakeBigData class in the same folder
         final N5Reader n5 = N5Factory.openReader("C:/structure/data/n5/example.n5");
         final RandomAccessibleInterval<FloatType> img = N5Utils.openVolatile(n5, "/volumes/raw");
+        // convert the input image from any type to FloatType
+        final RandomAccessibleInterval<FloatType> floats = Converters.convert(img, (a, b) -> b.set(a.getRealFloat()), new FloatType());
 
-        //final N5Reader n5 = N5Factory.openReader("C:/structure/data/n5/example.n5");
-        //final RandomAccessibleInterval<FloatType> img = N5Utils.openVolatile(n5, "/volumes/raw");
-
+        // create a pool of clijx instances representing OpenCL contexts exeucted on different GPUs
         CLIJxPool pool = CLIJxPool.fromDeviceNames(
-                new String[]{"620", "520", "RTX", "gfx9"},
-                new int[]{   1,     2,     4,     2});
+                new String[]{"Intel(R) UHD Graphics 620", "RTX"},
+                new int[]{   1,     4});
         System.out.println("CLIJ pool size: " + pool.size());
+        System.out.println("CLIJ pool: \n" + pool.log());
 
+        // create a processor representing the workflow we want to apply to the image
+        TileProcessor processor = new DummyFilter();
+        final CLIJxFilterOp<FloatType, FloatType> clijxFilter =
+                new CLIJxFilterOp<>(Views.extendMirrorSingle(floats), pool, processor, 20, 20, 20);
+
+        // open a BigDataViewer
         final SharedQueue queue = new SharedQueue(Math.max(1, pool.size()));
         BdvStackSource<?> bdv = BdvFunctions.show(VolatileViews.wrapAsVolatile(img, queue), "source");
         bdv.setDisplayRange(24000, 32000);
-
-        final RandomAccessibleInterval<FloatType> floats =
-                Converters.convert(
-                        img,
-                        (a, b) -> b.set(a.getRealFloat()),
-                        new FloatType());
-
-        final CLIJxFilterOp<FloatType, FloatType> clijxFilter =
-                new CLIJxFilterOp<>(Views.extendMirrorSingle(floats), pool, new DummyFilter(), 20, 20, 20);
-
+        // show result image lazily in the BigDataViewer
         final RandomAccessibleInterval<FloatType> filtered = Lazy.generate(
                 img,
                 new int[] {256, 256, 256},
                 new FloatType(),
                 AccessFlags.setOf(AccessFlags.VOLATILE),
                 clijxFilter);
-
         bdv = BdvFunctions.show(VolatileViews.wrapAsVolatile(filtered, queue), "DoG", BdvOptions.options().addTo(bdv));
         bdv.setDisplayRange(-1000, 1000);
     }
