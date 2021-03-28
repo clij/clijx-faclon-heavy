@@ -47,16 +47,18 @@ public void accept(ClearCLBuffer input, ClearCLBuffer output) {
 }
 ```
 
-
+Last but not least, you need to onfigure tile-size and margin for overlapping tiles:
 ```
 int margin = 20;
+int tile_size = 256;
+
 final CLIJxFilterOp<FloatType, FloatType> clijxFilter =
         new CLIJxFilterOp<>(Views.extendMirrorSingle(floats), pool, DummyFilter.class, margin, margin, margin);
 
 // make a result image lazily
 final RandomAccessibleInterval<FloatType> filtered = Lazy.generate(
         img,
-        new int[] {256, 256, 256},
+        new int[] {tile_size, tile_size, tile_size},
         new FloatType(),
         AccessFlags.setOf(AccessFlags.VOLATILE),
         clijxFilter);
