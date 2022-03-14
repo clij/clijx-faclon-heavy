@@ -22,8 +22,9 @@ public class DummyFilter extends AbstractTileProcessor {
         ClearCLBuffer temp = clijx.create(input);
 
         // process the image
-        clijx.differenceOfGaussian(input, temp, 1, 2, 3, 4, 5, 6);
-        clijx.thresholdOtsu(temp, output);
+//        clijx.differenceOfGaussian(input, temp, 1, 2, 3, 4, 5, 6);
+//        clijx.thresholdOtsu(temp, output);
+        this.clijx.voronoiOtsuLabeling(input, output, 30.0, 10.0);
 
         // clean up
         temp.close();

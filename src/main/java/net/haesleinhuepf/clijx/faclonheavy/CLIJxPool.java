@@ -63,8 +63,8 @@ public class CLIJxPool {
 
     public static CLIJxPool fullPool() {
         return CLIJxPool.fromDeviceNames(
-                new String[]{"UHD", "gfx9", "mx", "1070", "2060", "2070", "2080"},
-                new int[]   {     1,     1,     1,     1,      2,      2,      4}
+                new String[]{"UHD", "gfx9", "mx", "1070", "GTX", "2060", "2070", "2080"},
+                new int[]   {     1,     1,     1,     1,     1,      2,      2,      4}
         );
     }
 
