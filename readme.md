@@ -125,3 +125,7 @@ Last but not least, the processed image is larger than the requested tile-size b
 For optimal performance, keep the tiles as large as possible and minimize the margin.
 
 A complete example is given in [this java file](https://github.com/clij/clijx-faclon-heavy/blob/master/src/test/java/net/haesleinhuepf/clijx/faclonheavy/Tutorial.java)
+
+## Acknowledgements
+This project was supported by the Deutsche Forschungsgemeinschaft under Germany’s Excellence Strategy – EXC2068 - Cluster of Excellence "Physics of Life" of TU Dresden.
+This project has been made possible in part by grant number [2021-237734 (GPU-accelerating Fiji and friends using distributed CLIJ, NEUBIAS-style, EOSS4)](https://chanzuckerberg.com/eoss/proposals/gpu-accelerating-fiji-and-friends-using-distributed-clij-neubias-style/) from the Chan Zuckerberg Initiative DAF, an advised fund of the Silicon Valley Community Foundation.
